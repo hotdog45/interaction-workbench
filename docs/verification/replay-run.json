@@ -1,0 +1,24 @@
+{
+  "input": 5,
+  "unique": 4,
+  "filtered": 1,
+  "retries": 0,
+  "results": [
+    {
+      "duplicate": true,
+      "id": "demo-101"
+    },
+    {
+      "duplicate": true,
+      "id": "demo-102"
+    },
+    {
+      "duplicate": true,
+      "id": "demo-103"
+    },
+    {
+      "duplicate": true,
+      "id": "demo-104"
+    }
+  ]
+}

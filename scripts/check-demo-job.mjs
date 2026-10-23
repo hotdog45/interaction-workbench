@@ -7,4 +7,5 @@ assert.throws(()=>planEvents([{id:'',kind:'x',payload:'y'}]));
 assert.throws(()=>planEvents([{id:'1',kind:'x',payload:'y'},{id:'1',kind:'x',payload:'z'}]));
 await assert.rejects(()=>runBatch('https://unrelated.example/events',[]));
 await assert.rejects(()=>runBatch('http://127.0.0.1:4738/other',[]));
+assert.equal(planEvents([{id:'1',kind:'x',payload:'y'},{payload:'y',kind:'x',id:'1'}]).accepted.length,1);
 console.log('PASS: fixture planning, conflict detection and local-only endpoint boundary.');

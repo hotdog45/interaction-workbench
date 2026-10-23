@@ -119,7 +119,7 @@ func (s *Service) Handler() http.Handler {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		origin := r.Header.Get("Origin")
-		if origin != "" && origin != "http://localhost:4321" && origin != "http://127.0.0.1:4321" && origin != "http://127.0.0.1:4738" {
+		if origin != "" && origin != "http://localhost:4321" && origin != "http://127.0.0.1:4321" && origin != "http://127.0.0.1:4738" && origin != "http://localhost:4322" && origin != "http://127.0.0.1:4322" {
 			fail(w, 403, "local_origin_required")
 			return
 		}

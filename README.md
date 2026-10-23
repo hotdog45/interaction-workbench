@@ -1,47 +1,86 @@
 # Interaction Workbench Demo
 
-Runnable scenario demos for frontend, API and event workflows. Built with simulated data for reviewing implementation, architecture and delivery boundaries.
+Four runnable scenario views built with **React, Go and Node.js**, using simulated data. Explore customer support, character conversations, live-room control and repeatable event workflows.
 
-## First working workflow: event processing
+## Run locally
 
-Five JSON input events → field validation → duplicate filtering → Go API processing → bounded retry → structured receipts. Four unique events remain after filtering. A simulated transient failure exercises retry, and a second run safely replays already accepted event IDs.
-
-### Run locally
-
-Requirements: Go 1.23+ and Node.js 18.20+. This revision was tested with Go 1.23.3 and Node.js 18.20.1. No external packages or API keys are required for the API and CLI workflow.
-
-Terminal 1, from the repository root:
+Requirements: Node.js 18.20+ and Go 1.23+. Verified locally with Node.js 18.20.1 and Go 1.23.3.
 
 ```sh
-npm run dev:api
+npm ci
+npm run dev
 ```
 
-Terminal 2:
+Open **http://localhost:4322/** after the local API is ready. The UI and API listen on loopback only. The development runner starts the Go API when needed and reuses an existing matching fixture service.
+
+## Try the core flows
+
+- **Knowledge support:** choose an order or billing prompt → the React client receives streamed Go NDJSON events → inspect the sample knowledge citation. An unmatched request enters the human-handoff branch.
+- **Character conversation:** select either sample persona → send a message → review the fixture response. Switching persona resets the session.
+- **Live-room control:** start → pause → resume → end. The Go service validates transitions and expected versions, and replays repeated event IDs safely. The stage view represents seats; media transport can be integrated separately.
+- **Event job:** run five JSON fixtures → validate → filter duplicate input → process four unique events → retry one simulated transient failure → inspect receipts. Repeating the same batch verifies safe replay.
+
+中文：知识客服、角色对话、直播控制与事件任务均有可操作界面。点击问题、切换角色、操作场次或运行样例批次，即可查看业务状态与接口结果。
+
+## Running screenshots
+
+These images were captured from the running local React + Go demo, using its fixture data.
+
+### Knowledge matching and handoff
+
+![Knowledge match and citation](docs/screenshots/support-source.png)
+![Human handoff](docs/screenshots/support-handoff.png)
+
+### Live-room lifecycle
+
+![Active room](docs/screenshots/live-running.png)
+![Closed room and event log](docs/screenshots/live-ended.png)
+
+### Character session and event receipts
+
+![Character session](docs/screenshots/character-session.png)
+![Event processing receipts](docs/screenshots/automation-receipts.png)
+
+## Tests and repeatable verification
 
 ```sh
 npm test
 npm run test:api
+npm run build
+```
+
+The Go tests cover streamed events, knowledge routing, invalid inputs, lifecycle transitions, version conflicts, event-payload conflicts, concurrent deduplication, origin restrictions and body limits. Node tests cover fixture validation, semantic duplicate detection, conflicts and the local-only job endpoint.
+
+With the API running:
+
+```sh
 npm run demo:job
 npm run demo:job
 ```
 
-The fixture API listens only on `127.0.0.1:4738`. State is held in memory and clears when the service restarts. The CLI only permits its named local fixture endpoint.
+From clean memory, the first run accepts four unique events, filters one duplicate input and records one transient retry. The next run returns duplicate receipts without accepting more events. See the actual saved [first-run receipt](docs/verification/first-run.json) and [replay receipt](docs/verification/replay-run.json). Restarting the API clears in-memory state. The screenshot shows a replay run; the JSON receipts separately preserve the initial-retry verification.
 
-## Included API modules
+## Architecture
 
-- `POST /demo-api/chat`: NDJSON conversation events, sample knowledge matching, persona fixture replies and human-handoff states.
-- `GET /demo-api/room` and `POST /demo-api/room`: room lifecycle, expected-version checks and idempotent event replay.
-- `POST /demo-api/events`: duplicate detection, conflicting-payload rejection and simulated transient failure.
-- `GET /demo-api/health`: fixture mode and backend identity.
+- `web/scene.jsx`: React scenario views, user input, streaming reader and state feedback.
+- `services/api/main.go`: Go standard-library HTTP service, input validation, NDJSON streams, room state and idempotent event handling.
+- `services/api/fixtures.json`: shared synthetic knowledge, personas and event inputs.
+- `scripts/run-demo-job.mjs`: Node.js validation, deduplication, bounded retry and receipts.
+- `scripts/dev.mjs`: loopback UI server and local API proxy.
 
-Tests exercise streamed events, input validation, lifecycle transitions, conflicts, concurrent deduplication, origin checks and input limits. This first revision exposes the API and CLI core; the React scenario views and real running screenshots are being integrated in this same repository.
+### API
 
-## Implementation boundaries
+- `GET /demo-api/health`
+- `POST /demo-api/chat`
+- `GET /demo-api/room` and `POST /demo-api/room`
+- `POST /demo-api/events`
 
-Knowledge and character replies are fixtures. Live media, model APIs, wallets, chain transactions, production authentication and durable storage are integration options rather than active services. The sample never initiates a financial transaction. No customer code, private source data, credentials, user records or local caches are included.
+The UI port is 4322 and API port is 4738. The API uses memory rather than durable storage. To run only the API, use `npm run dev:api`.
 
-## 中文说明
+## Scope and integrations
 
-首个可运行流程为事件处理：读取5条模拟输入，去重为4条，通过 Go 接口处理，演示瞬时失败重试和再次执行的安全重放。可直接运行上方命令检查回执。Go 会话、房间和事件接口复用同一组自主实现的演示代码，React 视图随后在同一仓库接入。
+This repository contains independently created scenario demos. Knowledge and character replies use deterministic fixtures. Model APIs, voice, WebRTC transport, recording, production identity and storage are integration options, with the boundaries visible in code. Asset-related fixture events are notifications only; no wallet, chain transaction or financial action is performed.
+
+Only demo source, synthetic fixtures and real running screenshots are included. No customer source code, private project data, credentials or local caches are published. Dependencies are pinned in the lockfile; upstream notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 **场景演示 Demo，使用模拟数据。**
