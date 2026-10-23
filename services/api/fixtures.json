@@ -1,0 +1,18 @@
+{
+  "knowledge": [
+    {"id":"guide-order","title":{"zh":"示例订单指南","en":"Sample order guide"},"keywords":["订单","order","配送","delivery"],"answer":{"zh":"可以先核对订单状态与配送节点。需要修改收货信息时，转交人工确认后再处理。","en":"Check the order state and delivery milestones first. Changes to delivery details should go to a person for confirmation."}},
+    {"id":"guide-account","title":{"zh":"示例账户指南","en":"Sample account guide"},"keywords":["登录","账户","login","account"],"answer":{"zh":"先确认登录方式与当前会话状态。账户权限变更应经过本人确认，再由相应服务执行。","en":"Check the login method and current session. Account-access changes require the account holder's confirmation before a service acts."}},
+    {"id":"guide-invoice","title":{"zh":"示例开票指南","en":"Sample invoice guide"},"keywords":["发票","invoice","billing","账单"],"answer":{"zh":"可先整理订单编号与发票抬头，再进入人工审核队列。演示不提交真实开票申请。","en":"Prepare the order reference and billing details, then route the request for human review. This demo does not submit an invoice request."}}
+  ],
+  "personas": {
+    "librarian":{"zh":"我是星野，喜欢把复杂的想法整理成清晰的故事。我们可以从你今天最想完成的一件事聊起。","en":"I am Hoshino. I like turning complex ideas into clear stories. We can start with one thing you would like to finish today."},
+    "traveler":{"zh":"我是远舟，喜欢记录旅途中的新发现。今天想聊一段故事，还是一起规划下一次探索？","en":"I am Haru, a collector of travel stories. Shall we explore a story or plan a new adventure?"}
+  },
+  "events":[
+    {"id":"demo-101","kind":"content.published","payload":"sample-a"},
+    {"id":"demo-102","kind":"room.started","payload":"sample-room"},
+    {"id":"demo-101","kind":"content.published","payload":"sample-a"},
+    {"id":"demo-103","kind":"asset.observed","payload":"sample-chain-event","simulateFailure":true},
+    {"id":"demo-104","kind":"task.updated","payload":"sample-task"}
+  ]
+}

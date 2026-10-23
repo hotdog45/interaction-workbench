@@ -1,0 +1,15 @@
+{
+  "name": "interaction-workbench-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.20"
+  },
+  "scripts": {
+    "dev:api": "cd services/api && go run .",
+    "demo:job": "node scripts/run-demo-job.mjs --execute",
+    "test": "node scripts/check-demo-job.mjs",
+    "test:api": "cd services/api && go test -race ./..."
+  }
+}

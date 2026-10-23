@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {planEvents,runBatch} from './run-demo-job.mjs';
+const fixtures=JSON.parse(await fs.readFile(new URL('../services/api/fixtures.json',import.meta.url),'utf8'));
+const plan=planEvents(fixtures.events);assert.equal(plan.accepted.length,4);assert.equal(plan.duplicates.length,1);
+assert.throws(()=>planEvents([{id:'',kind:'x',payload:'y'}]));
+assert.throws(()=>planEvents([{id:'1',kind:'x',payload:'y'},{id:'1',kind:'x',payload:'z'}]));
+await assert.rejects(()=>runBatch('https://unrelated.example/events',[]));
+await assert.rejects(()=>runBatch('http://127.0.0.1:4738/other',[]));
+console.log('PASS: fixture planning, conflict detection and local-only endpoint boundary.');
