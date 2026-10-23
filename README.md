@@ -1,4 +1,4 @@
-# Interaction Workbench Demo
+# Interaction Workbench
 
 Four runnable scenario views built with **React, Go and Node.js**, using simulated data. Explore customer support, character conversations, live-room control and repeatable event workflows.
 
